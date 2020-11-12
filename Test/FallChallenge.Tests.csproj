@@ -11,4 +11,7 @@
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
     <Content Include="Player.Tests.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Source\FallChallenge.csproj" />
+  </ItemGroup>
 </Project>
