@@ -16,15 +16,22 @@ namespace FallChallenge
             while (true)
             {
                 var commands = GetCommands();
-                System.Console.Error.WriteLine("***** COMMANDS *****");
-                commands.ForEach(System.Console.Error.WriteLine);
+
+                var brewCommands = commands.Where(c => c.Type.Equals(CommandType.Brew)).ToList();
+                System.Console.Error.WriteLine("***** BREWS *****");
+                brewCommands.ForEach(System.Console.Error.WriteLine);
+
+                var castCommands = commands.Where(c => c.Type.Equals(CommandType.Cast)).ToList();
+                System.Console.Error.WriteLine("***** CASTS *****");
+                brewCommands.ForEach(System.Console.Error.WriteLine);
 
                 var inventories = GetInventories();
-                var myIventory = inventories.First();
                 System.Console.Error.WriteLine("***** INVENTORIES *****");
                 inventories.ForEach(System.Console.Error.WriteLine);
 
-                var bestCommand = GetTheBestCommand(myIventory, commands);
+                var myIventory = inventories.First();
+
+                var bestCommand = GetTheBestCommand(myIventory, brewCommands);
 
                 // in the first league: BREW <id> | WAIT; later: BREW <id> | CAST <id> [<times>] | LEARN <id> | REST | WAIT
                 Console.WriteLine($"BREW {bestCommand.Id}");
@@ -74,7 +81,7 @@ namespace FallChallenge
 
                 commands.Add(new Command{
                     Id = int.Parse(inputs[0]),
-                    Type = inputs[1],
+                    Type = GetCommandType(inputs[1]),
                     NumberOfBlueIngredient = int.Parse(inputs[2]),
                     NumberOfGreenIngredient = int.Parse(inputs[3]),
                     NumberOfOrangeIngredient = int.Parse(inputs[4]),
@@ -89,6 +96,25 @@ namespace FallChallenge
 
             return commands;
         }
+        static CommandType GetCommandType(string commandType)
+        {
+            switch (commandType)
+            {
+                case "BREW":
+                default:
+                    return CommandType.Brew;
+                case "CAST":
+                    return CommandType.Cast;
+                case "OPPONENT_CAST":
+                    return CommandType.OpponentCast;
+            }
+        }
+    }
+    public enum CommandType
+    {
+        Brew,
+        Cast,
+        OpponentCast
     }
     public class Inventory
     {
@@ -110,7 +136,7 @@ namespace FallChallenge
     public class Command
     {
         public int Id { get; set; }
-        public string Type { get; set; }
+        public CommandType Type { get; set; }
         public int NumberOfBlueIngredient { get; set; }
         public int NumberOfGreenIngredient { get; set; }
         public int NumberOfOrangeIngredient { get; set; }
