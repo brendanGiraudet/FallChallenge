@@ -53,7 +53,40 @@ namespace FallChallenge
 
         public static Command GetTheBestCast(Inventory inventory, Command command, List<Command> castCommands)
         {
-            throw new NotImplementedException();
+            var numberOfMissingYellowIngredients = inventory.NumberOfYellowIngredient + command.NumberOfYellowIngredient;
+            if(numberOfMissingYellowIngredients < 0)
+            {
+                if(inventory.NumberOfOrangeIngredient > 0)
+                    return castCommands.Find(c => c.NumberOfYellowIngredient > 0);
+                else if(inventory.NumberOfGreenIngredient > 0)
+                    return castCommands.Find(c => c.NumberOfOrangeIngredient > 0);
+                else if(inventory.NumberOfBlueIngredient > 0)
+                    return castCommands.Find(c => c.NumberOfGreenIngredient > 0);
+                else
+                    return castCommands.Find(c => c.NumberOfBlueIngredient > 0);
+            }
+
+            var numberOfMissingOrangeIngredients = inventory.NumberOfOrangeIngredient + command.NumberOfOrangeIngredient;
+            if(numberOfMissingOrangeIngredients < 0)
+            {
+                if(inventory.NumberOfGreenIngredient > 0)
+                    return castCommands.Find(c => c.NumberOfOrangeIngredient > 0);
+                else if(inventory.NumberOfBlueIngredient > 0)
+                    return castCommands.Find(c => c.NumberOfGreenIngredient > 0);
+                else
+                    return castCommands.Find(c => c.NumberOfBlueIngredient > 0);
+            }
+
+            var numberOfMissingGreenIngredients = inventory.NumberOfGreenIngredient + command.NumberOfGreenIngredient;
+            if(numberOfMissingGreenIngredients < 0)
+            {
+                if(inventory.NumberOfBlueIngredient > 0)
+                    return castCommands.Find(c => c.NumberOfGreenIngredient > 0);
+                else
+                    return castCommands.Find(c => c.NumberOfBlueIngredient > 0);
+            }
+
+            return castCommands.Find(c => c.NumberOfBlueIngredient > 0);
         }
 
         public static Command GetTheMostDoableCommand(Inventory inventory, List<Command> commands)
