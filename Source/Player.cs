@@ -18,16 +18,10 @@ namespace FallChallenge
                 var commands = GetCommands();
 
                 var brewCommands = commands.Where(c => c.Type.Equals(CommandType.Brew)).ToList();
-                System.Console.Error.WriteLine("***** BREWS *****");
-                brewCommands.ForEach(System.Console.Error.WriteLine);
 
                 var castCommands = commands.Where(c => c.Type.Equals(CommandType.Cast)).ToList();
-                System.Console.Error.WriteLine("***** CASTS *****");
-                castCommands.ForEach(System.Console.Error.WriteLine);
 
                 var inventories = GetInventories();
-                System.Console.Error.WriteLine("***** INVENTORIES *****");
-                inventories.ForEach(System.Console.Error.WriteLine);
 
                 var myIventory = inventories.First();
 
@@ -45,6 +39,7 @@ namespace FallChallenge
                 if (bestCast.Castable)
                 {
                     Console.WriteLine($"{bestCast.GetCommandTypeAsString()} {bestCast.Id}");
+                    continue;
                 }
 
                 Console.WriteLine($"REST");
@@ -143,10 +138,10 @@ namespace FallChallenge
 
         public static bool HaveEnoughIngredient(Inventory inventory, Command command)
         {
-            return inventory.NumberOfBlueIngredient - command.NumberOfBlueIngredient >= 0
-                && inventory.NumberOfGreenIngredient - command.NumberOfGreenIngredient >= 0
-                && inventory.NumberOfOrangeIngredient - command.NumberOfOrangeIngredient >= 0
-                && inventory.NumberOfYellowIngredient - command.NumberOfYellowIngredient >= 0;
+            return inventory.NumberOfBlueIngredient + command.NumberOfBlueIngredient >= 0
+                && inventory.NumberOfGreenIngredient + command.NumberOfGreenIngredient >= 0
+                && inventory.NumberOfOrangeIngredient + command.NumberOfOrangeIngredient >= 0
+                && inventory.NumberOfYellowIngredient + command.NumberOfYellowIngredient >= 0;
         }
 
         static List<Inventory> GetInventories()
