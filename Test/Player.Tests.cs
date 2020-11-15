@@ -116,8 +116,7 @@ namespace FallChallenge.Tests
                 NumberOfBlueIngredient = -2,
                 NumberOfGreenIngredient = -2,
                 NumberOfOrangeIngredient = 0,
-                NumberOfYellowIngredient = 0,
-                Price = 19
+                NumberOfYellowIngredient = 0
             };
             var expectedNumberOfAction = 3;
 

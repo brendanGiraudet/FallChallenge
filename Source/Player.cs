@@ -72,38 +72,33 @@ namespace FallChallenge
             return theMostDoableCommand;
         }
 
-        private static int GetNumberOfActionToBuildMissingIngredients(Inventory inventory, Command command)
+        public static int GetNumberOfActionToBuildMissingIngredients(Inventory inventory, Command command)
         {
             var numberOfaction = 0;
 
             var numberOfMissingBlueIngredients = inventory.NumberOfBlueIngredient + command.NumberOfBlueIngredient;
+            if(numberOfMissingBlueIngredients < 0)
+                numberOfaction += (int) Math.Round((decimal)(numberOfMissingBlueIngredients / 2), MidpointRounding.ToEven);
 
             var numberOfMissingGreenIngredients = inventory.NumberOfGreenIngredient + command.NumberOfGreenIngredient;
-
-            if(numberOfMissingBlueIngredients > 0)
-                numberOfMissingBlueIngredients = 0;
-
-            numberOfaction+= numberOfMissingBlueIngredients;
-
-            
-            if(numberOfMissingGreenIngredients > 0)
-                numberOfMissingGreenIngredients = 0;
-            else
-                numberOfaction += numberOfMissingGreenIngredients * 2 - numberOfMissingBlueIngredients;
+            if(numberOfMissingGreenIngredients < 0)
+                numberOfaction += numberOfMissingGreenIngredients * 2;
+            if(numberOfMissingBlueIngredients > 0 && numberOfMissingGreenIngredients < 0)
+               numberOfaction += numberOfMissingBlueIngredients;
 
             var numberOfMissingOrangeIngredients = inventory.NumberOfOrangeIngredient + command.NumberOfOrangeIngredient;
-            if(numberOfMissingOrangeIngredients > 0)
-                numberOfMissingOrangeIngredients = 0;
-            else
-                numberOfaction += numberOfMissingOrangeIngredients * 3 - ;
-
+            if(numberOfMissingOrangeIngredients < 0)
+                numberOfaction += numberOfMissingOrangeIngredients * 3;
+            if(numberOfMissingGreenIngredients > 0 && numberOfMissingOrangeIngredients < 0)
+                numberOfaction += numberOfMissingGreenIngredients;
+                
             var numberOfMissingYellowIngredients = inventory.NumberOfYellowIngredient + command.NumberOfYellowIngredient;
-            if(numberOfMissingYellowIngredients > 0)
-                numberOfMissingYellowIngredients = 0;
-            else
-                numberOfaction = numberOfMissingYellowIngredients * 4;
+            if(numberOfMissingYellowIngredients < 0)
+                numberOfaction += numberOfMissingYellowIngredients * 4;
+            if(numberOfMissingOrangeIngredients > 0 && numberOfMissingYellowIngredients < 0)
+               numberOfaction += numberOfMissingOrangeIngredients;
 
-            return numberOfaction;
+            return Math.Abs(numberOfaction);
         }
 
         public static Command GetTheDoableCommand(Inventory inventory, List<Command> commands)
